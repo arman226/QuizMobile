@@ -1,0 +1,23 @@
+{
+    "include":  ["src/**/*"],
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "commonjs",
+      "allowSyntheticDefaultImports": false,
+      "baseUrl": "./src",
+      // "paths": {
+      //   "assets/*": ["assets/*"],
+      //   "config/*": ["config/*", "config"],
+      //   "components/*": ["components/*"],
+      //   "components": ["components/index"],
+      //   "navigations/*": ["navigations/*", "navigations"],
+      //   "services/*": ["services/*"],
+      //   "styles/*": ["styles/*"],
+      //   "modules/*": ["modules/*"],
+      //   "screens/*": ["screens/*"],
+      //   "utils/*": ["utils/*", "utils"],
+      //   "constants/*": ["constants/*", "utils"]
+      // } 
+    }
+  }
+  
