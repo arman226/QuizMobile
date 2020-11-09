@@ -15,9 +15,9 @@ import {NAVY_BLUE} from '../../../styles/colors.styles';
 
 const Item = ({item}) => {
   const navigation = useNavigation();
-  const {categoryName, description, questions, image} = item;
+  const {category, description, questions, image} = item;
   const startGamePlay = () => {
-    navigation.navigate(screens.GAME_PLAY, {questions, categoryName});
+    // navigation.navigate(screens.GAME_PLAY, {questions, categoryN});
   };
   const colorProgression = ['#FFF1', '#FFF8', '#FFF'];
   return (
@@ -29,15 +29,15 @@ const Item = ({item}) => {
       <View style={styles.bottomDiv}>
         <View style={{padding: 5}}>
           <Text style={{fontSize: 16, color: '#FFF', fontWeight: 'bold'}}>
-            {categoryName}
+            {category}
           </Text>
-          <Text style={{color: '#FFF'}}>
+          {/* <Text style={{color: '#FFF'}}>
             {numberOfItemsDisplayText(
               questions.length,
               'question',
               'questions',
             )}
-          </Text>
+          </Text> */}
         </View>
       </View>
     </TouchableOpacity>

@@ -1,29 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import {Animated, StyleSheet, FlatList} from 'react-native';
+import {
+  Animated,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import * as ActionCreator from 'modules/testApi/actionCreators';
-import sampleSubject from './sampleSubjects';
+import * as ActionCreator from 'modules/subject/actionCreators';
 import Item from './Item';
 import Header from 'components/Header';
 import TitleBar from 'components/TitleBar';
 
 const {event, ValueXY} = Animated;
+const {height, width} = Dimensions.get('screen');
 
-const Subjects = ({testApi, fetchTestApiStart}) => {
+const Subjects = ({subjectList = [], isLoading, fetchSubjectsStart}) => {
   const [scrollY, setScrollY] = useState(new ValueXY());
 
   useEffect(() => {
-    fetchTestApiStart();
+    fetchSubjectsStart();
+
     return () => {
       setScrollY(new ValueXY());
     };
   }, []);
 
-  console.log('here', testApi);
-
   const renderSubjects = ({item}) => <Item item={item} index={0} />;
   const renderTitleBar = () => <TitleBar title="Subjects" />;
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <>
@@ -33,8 +42,9 @@ const Subjects = ({testApi, fetchTestApiStart}) => {
         onScroll={event([{nativeEvent: {contentOffset: {y: scrollY.y}}}], {
           useNativeDriver: false,
         })}
-        data={sampleSubject[0].subjects}
-        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        data={subjectList}
+        keyExtractor={(item, idx) => idx.toString()}
         renderItem={renderSubjects}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={renderTitleBar}
@@ -49,14 +59,17 @@ const styles = StyleSheet.create({
     paddingTop: 38,
     paddingBottom: 10,
     backgroundColor: '#FFFF',
+    minHeight: height,
   },
   contentText: {
     fontSize: 16,
   },
 });
 
-const select = ({testApi}) => {
-  return {testApi};
+const select = ({subject}) => {
+  const subjectList = subject.data;
+  const {isLoading} = subject;
+  return {subjectList, isLoading};
 };
 
 const actions = (dispatch) => {
