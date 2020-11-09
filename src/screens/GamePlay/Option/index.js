@@ -3,14 +3,14 @@ import {StyleSheet, Text, Dimensions, TouchableOpacity} from 'react-native';
 import {NEON_BLUE} from 'styles/colors.styles';
 
 const Option = ({item, onPress, style, textColor = '#fff'}) => {
-  const {title} = item;
+  const {optionName} = item;
 
   return (
     <TouchableOpacity
       activeOpacity={0.6}
       style={[styles.container, style]}
       onPress={onPress}>
-      <Text style={{color: textColor, fontWeight: 'bold'}}>{title}</Text>
+      <Text style={{color: textColor, fontWeight: 'bold'}}>{optionName}</Text>
     </TouchableOpacity>
   );
 };

@@ -15,17 +15,16 @@ import {NAVY_BLUE} from '../../../styles/colors.styles';
 
 const Item = ({item}) => {
   const navigation = useNavigation();
-  const {category, description, questions, image} = item;
+  const {category, categoryId, description} = item;
   const startGamePlay = () => {
-    // navigation.navigate(screens.GAME_PLAY, {questions, categoryN});
+    navigation.navigate(screens.GAME_PLAY, {categoryId});
   };
   const colorProgression = ['#FFF1', '#FFF8', '#FFF'];
   return (
-    <TouchableOpacity style={styles.container} onPress={startGamePlay}>
-      <ImageBackground
-        source={{uri: image}}
-        imageStyle={styles.imageStyle}
-        style={styles.itemContainer}></ImageBackground>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={startGamePlay}
+      activeOpacity={0.9}>
       <View style={styles.bottomDiv}>
         <View style={{padding: 5}}>
           <Text style={{fontSize: 16, color: '#FFF', fontWeight: 'bold'}}>

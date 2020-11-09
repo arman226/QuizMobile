@@ -1,17 +1,30 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Dimensions, Text, FlatList} from 'react-native';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as ActionCreator from 'modules/question/actionCreators';
 import Option from './Option';
-import {NAVY_BLUE, NEON_BLUE} from '../../styles/colors.styles';
+import {NAVY_BLUE, NEON_BLUE} from 'styles/colors.styles';
 import Header from './Header';
 import Question from './Question';
 import CloseButton from 'components/CloseButton';
 import ProgressBar from 'components/ProgressBar';
 
-const GamePlay = ({route, navigation}) => {
-  const {questions, categoryName} = route.params;
+const GamePlay = ({
+  fetchQuestionsStart,
+  isLoading,
+  questions,
+  route,
+  navigation,
+}) => {
+  const {categoryId} = route.params;
   const [index, setIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState('');
   const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    fetchQuestionsStart(categoryId);
+  }, []);
 
   const handleOnCloseButtonPressed = () => {
     navigation.goBack();
@@ -30,7 +43,7 @@ const GamePlay = ({route, navigation}) => {
     } else {
       navigation.goBack();
     }
-    alert(`answer is ${isCorrectAnswer ? 'correct' : 'wrong'}`);
+    alert(`answer is ${isCorrectAnswer === 1 ? 'correct' : 'wrong'}`);
   };
 
   const renderOptions = ({item}) => (
@@ -38,12 +51,19 @@ const GamePlay = ({route, navigation}) => {
       item={item}
       onPress={() => handleOnOptionPress(item)}
       style={{
-        backgroundColor: selectedOption === item.title ? 'white' : NEON_BLUE,
+        backgroundColor:
+          selectedOption === item.optionName ? 'white' : NEON_BLUE,
       }}
-      textColor={selectedOption === item.title ? NEON_BLUE : '#fff'}
+      textColor={selectedOption === item.optionName ? NEON_BLUE : '#fff'}
     />
   );
 
+  if (isLoading) {
+    return <Text>loading</Text>;
+  }
+  if (questions.length <= 0) {
+    return <Text>no Items</Text>;
+  }
   return (
     <View style={styles.mainContainer}>
       <ProgressBar divisor={questions.length} dividend={index + 1} />
@@ -52,11 +72,11 @@ const GamePlay = ({route, navigation}) => {
       </View>
       <Header questions={questions} index={index} score={score} />
       <View style={styles.quizContainer}>
-        <Question question={questions[index].question} />
+        <Question question={questions[index].questionDetails} />
         <FlatList
           data={questions[index].options}
           extraData={(index, selectedOption)}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, idx) => idx.toString()}
           renderItem={renderOptions}
         />
       </View>
@@ -77,4 +97,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GamePlay;
+const select = ({question}) => {
+  const questions = question.data;
+  const {isLoading} = question;
+  return {questions, isLoading};
+};
+
+const actions = (dispatch) => {
+  return bindActionCreators(ActionCreator, dispatch);
+};
+
+export default connect(select, actions)(GamePlay);

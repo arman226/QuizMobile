@@ -2,6 +2,7 @@ import {all} from 'redux-saga/effects';
 import {testApiSaga} from './testApi';
 import {subjectSaga} from './subject';
 import {categorySaga} from './category';
+import {questionSaga} from './question';
 
 // Compose all sagas in a single
 // Generator function and watches all actions
@@ -14,6 +15,7 @@ export default function* rootSaga() {
     testApiSaga(),
     subjectSaga(),
     categorySaga(),
+    questionSaga(),
     // all Sagas Here
   ];
 
